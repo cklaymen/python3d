@@ -72,18 +72,24 @@ from mathutils import Vector
 keyboard = logic.keyboard
 TURN_RIGHT_KEY = events.RIGHTARROWKEY
 TURN_LEFT_KEY = events.LEFTARROWKEY
-TURN_RIGHT_KEY2 = events.KKEY
-TURN_LEFT_KEY2 = events.LKEY
-ROTATION_STEP = 0.01
+TURN_RIGHT_KEY2 = events.LKEY
+TURN_LEFT_KEY2 = events.JKEY
+TURN_UP_KEY = events.IKEY
+TURN_DOWN_KEY = events.KKEY
+ROTATION_STEP = 0.03
 
 def is_key_pressed(key):
     return keyboard.events[key] == logic.KX_INPUT_ACTIVE
 
 def update_rotation(own):
-    if is_key_pressed(TURN_RIGHT_KEY) or is_key_pressed(TURN_RIGHT_KEY2):
-        own.applyRotation([0, 0, -ROTATION_STEP])
-    if is_key_pressed(TURN_LEFT_KEY) or is_key_pressed(TURN_LEFT_KEY2):
+    if is_key_pressed(TURN_LEFT_KEY) or is_key_pressed(TURN_RIGHT_KEY2):
         own.applyRotation([0, 0, ROTATION_STEP])
+    if is_key_pressed(TURN_RIGHT_KEY) or is_key_pressed(TURN_LEFT_KEY2):
+        own.applyRotation([0, 0, -ROTATION_STEP])
+    if is_key_pressed(TURN_UP_KEY):
+        own.applyRotation([-ROTATION_STEP, 0, 0], True)
+    if is_key_pressed(TURN_DOWN_KEY):
+        own.applyRotation([ROTATION_STEP, 0, 0], True)
 
 def main(controller):
     own = controller.owner
@@ -147,3 +153,18 @@ scene = logic.getCurrentScene()
 speed = scene.objects['Helicopter']['speed']
 
 own.applyRotation([0, 0, speed], True)
+
+
+
+
+### Light
+from bge import logic, events
+from mathutils import Vector
+
+def main(controller):
+    own = controller.owner
+    scene = logic.getCurrentScene()
+    helicopter = scene.objects['Helicopter']
+    own.worldPosition = helicopter.worldPosition
+    
+main(logic.getCurrentController())
